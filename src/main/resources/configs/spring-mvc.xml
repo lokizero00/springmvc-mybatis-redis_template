@@ -1,32 +1,40 @@
-<?xml version="1.0" encoding="UTF-8"?> 
-<beans xmlns="http://www.springframework.org/schema/beans" 
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jee="http://www.springframework.org/schema/jee"  
-   xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p" 
-   xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:util="http://www.springframework.org/schema/util" 
-   xsi:schemaLocation="http://www.springframework.org/schema/beans 
-           http://www.springframework.org/schema/beans/spring-beans-4.0.xsd 
-             http://www.springframework.org/schema/context 
-             http://www.springframework.org/schema/context/spring-context-4.0.xsd 
-             http://www.springframework.org/schema/jee 
-              http://www.springframework.org/schema/jee/spring-jee-4.0.xsd 
-              http://www.springframework.org/schema/mvc 
-             http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd 
-             http://www.springframework.org/schema/util 
-             http://www.springframework.org/schema/util/spring-util-4.0.xsd"> 
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jee="http://www.springframework.org/schema/jee"
+   xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+   xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:util="http://www.springframework.org/schema/util"
+   xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+             http://www.springframework.org/schema/context
+             http://www.springframework.org/schema/context/spring-context-4.0.xsd
+             http://www.springframework.org/schema/jee
+              http://www.springframework.org/schema/jee/spring-jee-4.0.xsd
+              http://www.springframework.org/schema/mvc
+             http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+             http://www.springframework.org/schema/util
+             http://www.springframework.org/schema/util/spring-util-4.0.xsd">
 
-   <context:annotation-config/> 
-   
-   <context:component-scan base-package="com.loki.server.controller" /> 
-   <mvc:annotation-driven /> 
-   <mvc:resources mapping="/styles/**" location="/styles/" /> 
-   <mvc:resources mapping="/scripts/**" location="/scripts/" /> 
-   <mvc:resources mapping="/images/**" location="/images/" /> 
-   <bean 
-     class="org.springframework.web.servlet.view.InternalResourceViewResolver"> 
-     <property name="prefix" value="/WEB-INF/views/" /> 
+   <!-- 引入json-map配置 -->
+   <import resource="classpath:jsonmap/*_map.xml"/>
+
+   <context:annotation-config/>
+   <mvc:annotation-driven />
+
+   <!-- bean视图解析器 -->
+	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver"
+		p:order="10" />
+
+   <context:component-scan base-package="com.loki.server.controller" />
+   <mvc:annotation-driven />
+   <mvc:resources mapping="/styles/**" location="/styles/" />
+   <mvc:resources mapping="/scripts/**" location="/scripts/" />
+   <mvc:resources mapping="/images/**" location="/images/" />
+   <bean
+     class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+     <property name="prefix" value="/WEB-INF/jsp/" />
      <property name="suffix" value=".jsp" />
-   </bean> 
-   
+   </bean>
+
    <!--避免IE执行AJAX时，返回JSON出现下载文件 -->
     <bean id="mappingJacksonHttpMessageConverter"
         class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
@@ -36,7 +44,7 @@
             </list>
         </property>
     </bean>
-    
+
     <!-- 启动SpringMVC的注解功能，完成请求和注解POJO的映射 -->
     <bean
         class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
@@ -46,5 +54,5 @@
             </list>
         </property>
     </bean>
-    
-</beans> 
+
+</beans>

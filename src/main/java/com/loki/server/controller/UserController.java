@@ -9,7 +9,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.loki.server.model.User;
 import com.loki.server.service.UserService;
@@ -17,10 +20,10 @@ import com.loki.server.service.UserService;
 @Controller
 @RequestMapping("/user")
 public class UserController {
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	/**
 	 * 获取所有用户列表
 	 * @param request
@@ -32,7 +35,7 @@ public class UserController {
 		request.setAttribute("userList", findAll);
 		return "/allUser";
 	}
-	
+
 	/**
 	 * 跳转到添加用户界面
 	 * @param request
@@ -40,7 +43,7 @@ public class UserController {
 	 */
 	@RequestMapping("/toAddUser")
 	public String toAddUser(HttpServletRequest request){
-		
+
 		return "/addUser";
 	}
 	/**
@@ -54,7 +57,7 @@ public class UserController {
 		userService.insert(user);
 		return "redirect:/user/getAllUser";
 	}
-	
+
 	/**
 	 *编辑用户
 	 * @param user
@@ -63,8 +66,8 @@ public class UserController {
 	 */
 	@RequestMapping("/updateUser")
 	public String updateUser(User user,HttpServletRequest request){
-		
-		
+
+
 		if(userService.update(user)){
 			user = userService.findById(user.getId());
 			request.setAttribute("user", user);
@@ -81,7 +84,7 @@ public class UserController {
 	 */
 	@RequestMapping("/getUser")
 	public String getUser(int id,HttpServletRequest request){
-		
+
 		request.setAttribute("user", userService.findById(id));
 		return "/editUser";
 	}
@@ -94,13 +97,13 @@ public class UserController {
 	@RequestMapping("/delUser")
 	public void delUser(int id,HttpServletRequest request,HttpServletResponse response){
 		String result = "{\"result\":\"error\"}";
-		
+
 		if(userService.delete(id)){
 			result = "{\"result\":\"success\"}";
 		}
-		
+
 		response.setContentType("application/json");
-		
+
 		try {
 			PrintWriter out = response.getWriter();
 			out.write(result);
@@ -109,5 +112,22 @@ public class UserController {
 		}
 
 	}
-	
+
+	//返回单个json对象
+	@RequestMapping(value="/getUserInJson",method=RequestMethod.GET)
+	public @ResponseBody User getUserInJSON() {
+		User user=userService.findById(6);
+		return user;
+	}
+
+	//返回复杂json对象集合
+	@RequestMapping(value="/getUserListByJson")
+	public String getUserListInJson(ModelMap mm) {
+		List<User> userList=userService.findAll();
+		mm.addAttribute("userList", userList);
+		mm.addAttribute("School", "SuZhou");
+		mm.addAttribute("Work", "YanFa");
+		return "userListJson";
+	}
+
 }

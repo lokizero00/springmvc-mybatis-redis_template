@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<beans xmlns="http://www.springframework.org/schema/beans" 
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jee="http://www.springframework.org/schema/jee"  
+   xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p" 
+   xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:util="http://www.springframework.org/schema/util" 
+   xsi:schemaLocation="http://www.springframework.org/schema/beans 
+           http://www.springframework.org/schema/beans/spring-beans-4.0.xsd 
+             http://www.springframework.org/schema/context 
+             http://www.springframework.org/schema/context/spring-context-4.0.xsd 
+             http://www.springframework.org/schema/jee 
+              http://www.springframework.org/schema/jee/spring-jee-4.0.xsd 
+              http://www.springframework.org/schema/mvc 
+             http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd 
+             http://www.springframework.org/schema/util 
+             http://www.springframework.org/schema/util/spring-util-4.0.xsd"> 
+   
+   
+   
+   	<!-- XMl及JSON视图解析器配置 -->
+   	<!-- 如果仅仅返回一个对象的json数据，可以使用简写配置 -->
+	<!-- <bean id="userListJson"
+		class="org.springframework.web.servlet.view.json.MappingJacksonJsonView"
+		p:renderedAttributes="userList" /> -->
+	<!-- 如果返回多个对象的复杂json数据，可以使用下面的配置 -->
+   	<bean id="userListJson"
+		class="org.springframework.web.servlet.view.json.MappingJacksonJsonView">
+		<property name="renderedAttributes">
+			<set>
+				<value>userList</value>
+				<value>School</value>
+				<value>Work</value>
+			</set>
+		</property>
+	</bean>
+</beans> 
